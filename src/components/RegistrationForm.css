@@ -1,0 +1,256 @@
+/* RegistrationForm.css */
+
+/* 1. CORE CANVAS STRETCH */
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  min-height: 100vh !important;
+  background-color: #0f172a;
+  box-sizing: border-box;
+}
+
+/* 2. BASE LAYER: Full Viewport Premium Blue Gradient */
+.fullscreen-auth-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0052cc 0%, #0747a6 40%, #002266 100%);
+  padding: 3rem 1.5rem; 
+  box-sizing: border-box;
+}
+
+.auth-center-stack {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 3. TAGLINE BRAND IDENTITY */
+.company-brand-name {
+  color: #ffffff !important;
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  display: block;
+  width: 100%;
+}
+
+/* 4. MAJOR PURE WHITE CARD LAYER */
+.glass-registration-card {
+  width: 100%;
+  background: #ffffff; 
+  border: 1px solid #dfe1e6; 
+  border-radius: 16px;
+  padding: 3rem 2.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35); 
+  box-sizing: border-box;
+}
+
+.glass-registration-card h2 {
+  color: #1e2937; 
+  font-size: 1.6rem;
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.login-redirect {
+  font-size: 0.9rem;
+  color: #4b5563; 
+  margin-bottom: 2.25rem;
+  text-align: center;
+}
+
+.login-redirect a {
+  color: #0052cc; 
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-redirect a:hover {
+  text-decoration: underline;
+}
+
+/* 5. FORM LAYOUT & CONTROL INPUTS */
+.form-field {
+  margin-bottom: 1.4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  font-size: 0.85rem;
+  color: #374151; 
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Styling applied to both fields and the system role select container box */
+.form-field input,
+.form-field select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid #dfe1e6; 
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #1f2937; 
+  background-color: #fafbfc; 
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+/* Specific native optimization for dropdown select height alignment */
+.form-field select {
+  cursor: pointer;
+  appearance: none; /* Removes native OS styles for consistency */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+  padding-right: 2.5rem;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: #0052cc; 
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15);
+}
+
+.form-field input::placeholder {
+  color: #9ca3af; 
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #4b5563;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.toggle-password-btn:hover {
+  color: #1f2937;
+}
+
+/* 6. SYSTEM RULE CHECKLISTS */
+.password-requirements {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 1rem;
+  margin-top: -0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #6b7280; 
+  text-align: left;
+}
+
+.requirement-item::before {
+  content: "•";
+  margin-right: 6px;
+  font-size: 0.9rem;
+}
+
+.requirement-item.valid {
+  color: #10b981; 
+}
+
+.requirement-item.valid::before {
+  color: #10b981;
+}
+
+/* 7. LEGALS & ACTION TRIGGER FOOTERS */
+.marketing-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+  font-size: 0.82rem;
+  color: #4b5563;
+  line-height: 1.4;
+  cursor: pointer;
+  text-align: left;
+}
+
+.marketing-consent input {
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.legal-notice {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin-bottom: 2.25rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.legal-notice a {
+  color: #0052cc;
+  text-decoration: none;
+}
+
+.legal-notice a:hover {
+  text-decoration: underline;
+}
+
+/* PILL INTERFACE SUBMIT BUTTON */
+.pill-submit-btn {
+  width: 100%;
+  max-width: 240px;
+  background-color: #0052cc; 
+  color: #ffffff; 
+  border: none;
+  padding: 0.9rem;
+  border-radius: 50px; 
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.25);
+}
+
+.pill-submit-btn:hover {
+  background-color: #0043ce;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 82, 204, 0.35);
+}
+
+@media (max-width: 480px) {
+  .password-requirements { grid-template-columns: 1fr; }
+  .glass-registration-card { padding: 2rem 1.5rem; }
+  .company-brand-name { font-size: 2.5rem; }
+}
