@@ -1,4 +1,4 @@
-/* RegistrationForm.css */
+/* LoginForm.css */
 
 /* ─── RESET & VIEWPORT LOCK ─────────────────────────────────────────── */
 *, *::before, *::after {
@@ -10,7 +10,7 @@
 html, body, #root {
   width: 100%;
   height: 100%;
-  overflow: hidden !important; /* Strictly blocks all background scrolling */
+  overflow: hidden !important; /* Prevents all background scrolling */
   background-color: #e0f2fe;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -24,99 +24,95 @@ html, body, #root {
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
-  padding: 16px;
+  padding: 12px;
   overflow: hidden;
 }
 
 /* ─── CENTER STACK ───────────────────────────────────────────────────── */
 .auth-center-stack {
   width: 100%;
-  max-width: 680px; /* Maintained the wider container layout */
+  max-width: 680px; /* Perfectly aligns with your 680px registration frame */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0px; /* Completely removed outer stack gaps to control spacing manually */
 }
 
-/* ─── BRAND (Inside Card Integration) ────────────────────────────────── */
-/* ─── BRAND (BALANCED SPACING) ───────────────────────────── */
-
+/* ─── BRAND (Inside Card Integration - ULTRA COMPACTED) ────────────── */
 .brand-container {
   text-align: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.2rem;
 }
 
 .company-brand-name {
   color: #0369a1;
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   font-weight: 800;
   letter-spacing: -1px;
-
-  margin: 0;
-  padding: 0;
-  line-height: 1;
+  line-height: 0.95;
 }
 
 .company-tagline {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: #075985;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
-
-  margin-top: 4px; /* Nice professional gap */
-  line-height: 1.2;
+  margin-top: 2px;
+  line-height: 1;
 }
+
 /* ─── WIDER FROSTED GLASS CARD ───────────────────────────────────────── */
-.glass-registration-card {
+.glass-login-card {
   width: 100%;
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 20px;
-  padding: 2rem 3rem; /* Perfectly balanced interior padding */
+  padding: 2rem 3rem; /* Compact layout spacing configuration */
 }
 
-.glass-registration-card h2 {
+.glass-login-card h2 {
   color: #111827;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 600;
   text-align: center;
   letter-spacing: -0.5px;
-  margin-top: 0.25rem; /* Micro-gap below the tagline container */
-  margin-bottom: 2px;
+  margin-top: 0px;
+  margin-bottom: 1px;
+  line-height: 1.1;
 }
 
-.login-redirect {
-  font-size: 0.88rem;
+.register-redirect {
+  font-size: 0.82rem;
   color: #4b5563;
   text-align: center;
-  margin-bottom: 1.5rem; /* Reduced from 2rem to pull the form up cleanly */
+  margin-bottom: 1.5rem; /* Squeezed gap layout */
+  line-height: 1.1;
 }
 
-.login-redirect a {
+.register-redirect a {
   color: #0284c7;
   font-weight: 600;
   text-decoration: none;
 }
-.login-redirect a:hover { text-decoration: underline; }
+.register-redirect a:hover { text-decoration: underline; }
 
 /* ─── HORIZONTAL FORM FIELDS ─────────────────────────────────────────── */
 .form-field {
   display: flex;
-  flex-direction: row;       /* Keeps label and inputs side-by-side */
+  flex-direction: row;       /* Forces horizontal alignment layout side-by-side */
   align-items: center;       
   justify-content: space-between;
-  margin-bottom: 1.1rem;     /* Slightly optimized row gap */
+  margin-bottom: 1.1rem;     
   gap: 16px;
 }
 
 .form-field label {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: #1f2937;
   font-weight: 600;
-  flex: 0 0 150px;           /* Uniform structural alignment for labels */
+  flex: 0 0 150px;           /* Replicates the exact 150px layout margin line anchor */
   text-align: left;
 }
 
@@ -128,31 +124,19 @@ html, body, #root {
   width: 100%;
 }
 
-.form-field input,
-.form-field select {
+.form-field input {
   width: 100%;
   padding: 9px 14px;
   border: 1px solid rgba(2, 132, 199, 0.25);
   border-radius: 8px;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   color: #111827;
   background-color: rgba(255, 255, 255, 0.9);
   font-family: inherit;
   transition: all 0.2s ease;
 }
 
-.form-field select {
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 0.9em;
-  padding-right: 2.5rem;
-}
-
-.form-field input:focus,
-.form-field select:focus {
+.form-field input:focus {
   outline: none;
   border-color: #0ea5e9;
   background-color: #ffffff;
@@ -168,45 +152,51 @@ html, body, #root {
   background: none;
   border: none;
   color: #4b5563;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   cursor: pointer;
   font-weight: 500;
 }
 .toggle-password-btn:hover { color: #0284c7; }
 
-/* ─── PASSWORD REQUIREMENTS CHECKLIST ───────────────────────────────── */
-.password-requirements {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px 16px;
+/* ─── LOGIN UTILITIES ROW (REMEMBER ME & FORGOT PASSWORD) ───────────── */
+.login-utilities-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-top: -0.5rem;
-  margin-bottom: 1.25rem;
-  margin-left: 166px; /* Aligns requirements box cleanly beneath the input wrapper */
+  margin-bottom: 1.5rem;
+  margin-left: 166px; /* Aligns row items directly underneath the fields container bounding box */
 }
 
-.requirement-item {
+.remember-me-consent {
   display: flex;
   align-items: center;
-  font-size: 0.74rem;
-  color: #6b7280;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #4b5563;
+  cursor: pointer;
 }
 
-.requirement-item::before {
-  content: "•";
-  margin-right: 6px;
-  font-size: 0.85rem;
+.remember-me-consent input {
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
 }
 
-.requirement-item.valid        { color: #10b981; }
-.requirement-item.valid::before { color: #10b981; }
+.forgot-password-link {
+  font-size: 0.8rem;
+  color: #0284c7;
+  text-decoration: none;
+  font-weight: 500;
+}
+.forgot-password-link:hover { text-decoration: underline; }
 
 /* ─── LEGAL NOTICE & ACTIONS ─────────────────────────────────────────── */
 .legal-notice {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: #6b7280;
   text-align: center;
-  margin-top: 1.2rem;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.25rem;
   line-height: 1.4;
 }
 .legal-notice a { color: #0284c7; text-decoration: none; }
@@ -220,9 +210,9 @@ html, body, #root {
   background-color: #0ea5e9;
   color: #ffffff;
   border: none;
-  padding: 11px;
+  padding: 10px;
   border-radius: 50px;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -238,9 +228,9 @@ html, body, #root {
 @media (max-width: 640px) {
   html, body, #root { overflow-y: auto !important; } 
   .fullscreen-auth-wrapper { padding: 16px; height: auto; min-height: 100vh; }
-  .glass-registration-card   { padding: 1.5rem; }
-  .form-field { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 1rem; }
+  .glass-login-card   { padding: 1.25rem; }
+  .form-field { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 0.85rem; }
   .form-field label { flex: none; width: auto; }
-  .password-requirements     { grid-template-columns: 1fr; margin-left: 0; gap: 2px; }
-  .company-brand-name        { font-size: 2rem; }
+  .login-utilities-row { flex-direction: column; align-items: flex-start; margin-left: 0; gap: 8px; }
+  .company-brand-name { font-size: 1.8rem; }
 }

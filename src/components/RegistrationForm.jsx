@@ -1,32 +1,34 @@
 import React, { useState } from 'react';
 import './RegistrationForm.css';
 
-function RegistrationForm() {
+// CRITICAL FIX: Added { onNavigate } inside the arguments here
+function RegistrationForm({ onNavigate }) {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
-    role: 'Employee', // Default role based on specs
-    password: '',
-    marketingConsent: false
+    role: '', 
+    password: ''
   });
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Registering WorkHive User with Role Permissions:', formData);
-    // Ready to connect to your Spring Boot Backend API
+    if (!formData.role) {
+      alert("Please select a valid role before proceeding.");
+      return;
+    }
+    console.log('Registering WorkHive User:', formData);
   };
 
-  // Real-time password safety metric checks
   const checks = {
     length: formData.password.length >= 8,
     uppercase: /[A-Z]/.test(formData.password),
@@ -39,19 +41,22 @@ function RegistrationForm() {
     <div className="fullscreen-auth-wrapper">
       <div className="auth-center-stack">
         
-        {/* WorkHive Brand Identification */}
-        <div className="company-brand-name">WorkHive</div>
-
-        {/* Pure White Registration Canvas */}
         <div className="glass-registration-card">
+          
+          <div className="brand-container">
+            <h1 className="company-brand-name">WorkHive</h1>
+            <p className="company-tagline">Collaborate. Assign. Achieve.</p>
+          </div>
+
           <h2>Create your account</h2>
           <p className="login-redirect">
-            Already have an account? <a href="/login">Log in</a>
+            {/* CHANGED: Simplified 'loginForm' to 'login' to match standard state mapping */}
+            Already have an account? <a href="#login" onClick={(e) => { e.preventDefault(); onNavigate('login'); }}>Log in</a>
           </p>
-
+          
           <form onSubmit={handleSubmit}>
             
-            {/* Full Name Input - Critical for Task Allocation */}
+            {/* Full Name Input */}
             <div className="form-field">
               <label htmlFor="fullName">Full Name</label>
               <div className="input-wrapper">
@@ -83,7 +88,7 @@ function RegistrationForm() {
               </div>
             </div>
 
-            {/* Role Dropdown Selector - Critical for WorkHive System Role Assignment */}
+            {/* Role Dropdown Selector */}
             <div className="form-field">
               <label htmlFor="role">Account Type / Role</label>
               <div className="input-wrapper">
@@ -94,6 +99,7 @@ function RegistrationForm() {
                   onChange={handleChange}
                   required
                 >
+                  <option value="" disabled hidden>Select Role</option>
                   <option value="Employee">Employee (Track & Create Goals)</option>
                   <option value="Boss">Manager / Boss (Assign & Monitor Tasks)</option>
                 </select>
@@ -123,33 +129,19 @@ function RegistrationForm() {
               </div>
             </div>
 
-            {/* Micro-interactive Password Rules */}
+            {/* Password Validation Requirements */}
             <div className="password-requirements">
-              <div className={`requirement-item ${checks.length ? 'valid' : ''}`}>Use 8 or more characters</div>
-              <div className={`requirement-item ${checks.uppercase ? 'valid' : ''}`}>One Uppercase character</div>
-              <div className={`requirement-item ${checks.lowercase ? 'valid' : ''}`}>One lowercase character</div>
+              <div className={`requirement-item ${checks.length ? 'valid' : ''}`}>Use 8+ characters</div>
+              <div className={`requirement-item ${checks.uppercase ? 'valid' : ''}`}>One Uppercase</div>
+              <div className={`requirement-item ${checks.lowercase ? 'valid' : ''}`}>One lowercase</div>
               <div className={`requirement-item ${checks.special ? 'valid' : ''}`}>One special character</div>
               <div className={`requirement-item ${checks.number ? 'valid' : ''}`}>One number</div>
             </div>
 
-            {/* Consent Agreement */}
-            <label className="marketing-consent">
-              <input 
-                type="checkbox" 
-                name="marketingConsent" 
-                checked={formData.marketingConsent} 
-                onChange={handleChange} 
-              />
-              <span>
-                I want to receive emails about team productivity updates, feature rollouts, and announcements.
-              </span>
-            </label>
-
             <p className="legal-notice">
-              By creating an account, you agree to the <a href="#terms">Terms of use</a> and <a href="#privacy">Privacy Policy</a>.
+              By registering, you agree to our <a href="#terms">Terms</a> & <a href="#privacy">Privacy Policy</a>.
             </p>
 
-            {/* Premium Pill Action Button */}
             <button type="submit" className="pill-submit-btn">
               Create an account
             </button>
