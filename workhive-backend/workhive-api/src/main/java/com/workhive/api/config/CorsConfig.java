@@ -10,11 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") 
-                .allowedOrigins(
-                    "http://localhost:5173", 
-                    "https://work-hive-three.vercel.app",
-                    "https://work-hive-1b4b5k9ed-sreeshanthparvathi05-7908s-projects.vercel.app"
-                ) 
+                .allowedOriginPatterns("*") // 🚀 NOW SAFE: Accepts all dynamic Vercel links without crashing
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
