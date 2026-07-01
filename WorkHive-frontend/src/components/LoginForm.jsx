@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
-
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 function LoginForm({ onNavigate }) {
   const [credentials, setCredentials] = useState({
     username: '', // Aligned with Spring Boot backend entity key

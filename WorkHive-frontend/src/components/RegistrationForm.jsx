@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './RegistrationForm.css';
-
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 function RegistrationForm({ onNavigate }) {
   const [formData, setFormData] = useState({
     username: '', // Fixed: Aligned with Spring Boot 'username' field

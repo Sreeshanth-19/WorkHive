@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './SelfTaskForm.css';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 function SelfTaskForm({ onAddGoal, onClose }) {
   const currentSessionUser = JSON.parse(localStorage.getItem("workhive_user")) || { id: null };

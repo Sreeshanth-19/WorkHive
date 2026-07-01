@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TaskCard from './TaskCard';
 import SelfTaskForm from './SelfTaskForm';
 import './EmployeeDashboard.css';
-
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 function EmployeeDashboard({ onNavigate }) {
   // Extract live session profile information safely
   const currentSessionUser = JSON.parse(localStorage.getItem("workhive_user")) || { id: null, username: "Employee" };

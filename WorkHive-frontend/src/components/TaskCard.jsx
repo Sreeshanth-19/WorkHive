@@ -1,6 +1,6 @@
 import React from 'react';
 import './TaskCard.css';
-
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 function TaskCard({ task, userRole, onStatusChange, onDelete }) {
   if (!task) return null;
 
