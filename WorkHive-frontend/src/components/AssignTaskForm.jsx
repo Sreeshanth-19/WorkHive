@@ -34,7 +34,7 @@ function AssignTaskForm({ teamMembers, onAddTask, onClose }) {
     setErrorMessage('');
     
     try {
-      const response = await fetch(`http://localhost:8080/api/tasks/user/${taskData.assignedTo}`, {
+     const response = await fetch(`${API_BASE}/api/tasks/user/${taskData.assignedTo}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

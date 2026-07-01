@@ -17,7 +17,7 @@ function EmployeeDashboard({ onNavigate }) {
     if (!currentSessionUser.id) return;
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8080/api/tasks/user/${currentSessionUser.id}`);
+      const response = await fetch(`${API_BASE}/api/tasks/user/${currentSessionUser.id}`);
       if (!response.ok) throw new Error("Failed to pull personal action items queue.");
       
       const databaseTasks = await response.json();
@@ -65,7 +65,7 @@ function EmployeeDashboard({ onNavigate }) {
       if (newStatus === "In Progress") backendStatus = "IN_PROGRESS";
       if (newStatus === "Completed") backendStatus = "COMPLETED";
 
-      const response = await fetch(`http://localhost:8080/api/tasks/${id}`, {
+      const response = await fetch(`${API_BASE}/api/tasks/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

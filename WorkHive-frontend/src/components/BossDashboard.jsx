@@ -15,7 +15,7 @@ function BossDashboard({ onNavigate }) {
     try {
       setLoading(true);
       
-      const userResponse = await fetch("http://localhost:8080/api/users");
+      const userResponse = await fetch(`${API_BASE}/api/users`);
       if (!userResponse.ok) throw new Error("Failed to pull system users.");
       const allUsers = await userResponse.json();
 
@@ -32,7 +32,7 @@ function BossDashboard({ onNavigate }) {
 
       let aggregatedTasks = [];
       for (const employee of employeesOnly) {
-        const taskResponse = await fetch(`http://localhost:8080/api/tasks/user/${employee.id}`);
+        const taskResponse = await fetch(`${API_BASE}/api/tasks/user/${employee.id}`);
         if (taskResponse.ok) {
           const userTasks = await taskResponse.json();
           
@@ -93,7 +93,7 @@ function BossDashboard({ onNavigate }) {
 
   const handleDeleteTask = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/tasks/${id}`, {
+      const response = await fetch(`${API_BASE}/api/tasks/${id}`, {
         method: "DELETE"
       });
       if (!response.ok) throw new Error("Could not drop task from backend.");

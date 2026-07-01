@@ -32,7 +32,7 @@ function RegistrationForm({ onNavigate }) {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/users/register", {
+      const response = await fetch(`${API_BASE}/api/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

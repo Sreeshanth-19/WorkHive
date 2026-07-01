@@ -36,7 +36,7 @@ function SelfTaskForm({ onAddGoal, onClose }) {
     setErrorMessage('');
     
     try {
-      const response = await fetch(`http://localhost:8080/api/tasks/user/${currentSessionUser.id}`, {
+      const response = await fetch(`${API_BASE}/api/tasks/user/${currentSessionUser.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
