@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './AssignTaskForm.css';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
 function AssignTaskForm({ teamMembers, onAddTask, onClose }) {
   const [taskData, setTaskData] = useState({
     title: '',
@@ -34,7 +36,9 @@ function AssignTaskForm({ teamMembers, onAddTask, onClose }) {
     setErrorMessage('');
     
     try {
-     const response = await fetch(`${API_BASE}/api/tasks/user/${taskData.assignedTo}`, {
+      console.log("Deploying new task objective to target resource:", `${API_BASE}/api/tasks/user/${taskData.assignedTo}`);
+
+      const response = await fetch(`${API_BASE}/api/tasks/user/${taskData.assignedTo}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -43,22 +47,40 @@ function AssignTaskForm({ teamMembers, onAddTask, onClose }) {
           title: taskData.title.trim(),
           description: taskData.title.trim(), 
           status: 'TODO',
-          dueDate: taskData.deadline, 
+          dueDate: taskData.deadline, // HTML5 date inputs natively provide standard YYYY-MM-DD
           assignedBy: 'Manager (Boss)',
           priority: taskData.priority.toUpperCase()
         })
       });
 
-      if (!response.ok) {
-        throw new Error("The backend server rejected task persistence initialization.");
+      // 1. Read response payload as plain text first to safely prevent formatting crashes
+      const responseText = await response.text();
+
+      // 2. Safely attempt a JSON conversion if applicable
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        data = null;
       }
 
+      if (!response.ok) {
+        // Extract field validation maps from GlobalExceptionHandler if present
+        if (data && typeof data === 'object') {
+          const combinedErrors = Object.values(data).join(" | ");
+          throw new Error(combinedErrors);
+        }
+        throw new Error(responseText || "The backend server rejected task persistence initialization.");
+      }
+
+      // Success sequence execution
       onAddTask();
       setTaskData({ title: '', assignedTo: '', priority: 'MEDIUM', deadline: '' });
       if (onClose) onClose(); 
 
     } catch (err) {
-      setErrorMessage(err.message);
+      console.error("Task deployment crash caught:", err);
+      setErrorMessage(err.message || "A network connectivity exception occurred.");
     } finally {
       setLoading(false);
     }
@@ -86,6 +108,7 @@ function AssignTaskForm({ teamMembers, onAddTask, onClose }) {
 
         <form onSubmit={handleSubmit}>
           
+          {/* Objective Title */}
           <div className="dashboard-form-field">
             <label htmlFor="title">Objective Title</label>
             <div className="dashboard-input-wrapper">
@@ -102,6 +125,7 @@ function AssignTaskForm({ teamMembers, onAddTask, onClose }) {
             </div>
           </div>
 
+          {/* Assign Target Resource */}
           <div className="dashboard-form-field">
             <label htmlFor="assignedTo">Assign Target Resource</label>
             <div className="dashboard-input-wrapper">
@@ -123,6 +147,7 @@ function AssignTaskForm({ teamMembers, onAddTask, onClose }) {
             </div>
           </div>
 
+          {/* Severity / Priority */}
           <div className="dashboard-form-field">
             <label htmlFor="priority">Severity / Priority</label>
             <div className="dashboard-input-wrapper">
@@ -141,6 +166,7 @@ function AssignTaskForm({ teamMembers, onAddTask, onClose }) {
             </div>
           </div>
 
+          {/* Target Deadline */}
           <div className="dashboard-form-field">
             <label htmlFor="deadline">Target Deadline</label>
             <div className="dashboard-input-wrapper">
@@ -152,7 +178,7 @@ function AssignTaskForm({ teamMembers, onAddTask, onClose }) {
                 onChange={handleChange} 
                 required 
                 disabled={loading}
-                min={todayDateString} /* BLOCKS PAST DATES visually and systematically */
+                min={todayDateString}
               />
             </div>
           </div>

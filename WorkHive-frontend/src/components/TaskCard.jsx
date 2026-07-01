@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TaskCard.css';
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
 function TaskCard({ task, userRole, onStatusChange, onDelete }) {
+  const [isUpdating, setIsUpdating] = useState(false); // 🚀 Added local toggle to prevent multi-click network race conditions
+
   if (!task) return null;
 
   const id = task.id;
@@ -17,7 +19,7 @@ function TaskCard({ task, userRole, onStatusChange, onDelete }) {
   if (rawStatus === "IN_PROGRESS" || rawStatus === "IN PROGRESS") displayStatus = "In Progress";
   if (rawStatus === "COMPLETED") displayStatus = "Completed";
 
-  // 2. Dynamic Priority Normalizer (Replaced the hardcoded fallback!)
+  // 2. Dynamic Priority Normalizer
   const rawPriority = String(task.priority || '').toUpperCase().trim();
   let displayPriority = "Medium";
   if (rawPriority === "HIGH") displayPriority = "High";
@@ -28,8 +30,30 @@ function TaskCard({ task, userRole, onStatusChange, onDelete }) {
   const statusClass = displayStatus.toLowerCase().replace(/\s+/g, '-');
   const priorityClass = displayPriority.toLowerCase();
 
+  const handleStatusUpdate = async (e) => {
+    const nextValue = e.target.value;
+    setIsUpdating(true);
+    try {
+      await onStatusChange(id, nextValue);
+    } catch (err) {
+      console.error("Failed processing inline status transfer:", err);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    setIsUpdating(true);
+    try {
+      await onDelete(id);
+    } catch (err) {
+      console.error("Failed processing inline record purge:", err);
+      setIsUpdating(false); // Only unset if component didn't unmount from dashboard layout removal
+    }
+  };
+
   return (
-    <div className={`workhive-task-card ${statusClass}`}>
+    <div className={`workhive-task-card ${statusClass} ${isUpdating ? 'card-syncing-lock' : ''}`} style={{ opacity: isUpdating ? 0.6 : 1 }}>
       
       {/* Card Header: Priority & Operational Actions */}
       <div className="card-top-bar">
@@ -38,7 +62,13 @@ function TaskCard({ task, userRole, onStatusChange, onDelete }) {
         </span>
         
         {userRole === 'boss' && (
-          <button className="card-delete-icon-btn" onClick={() => onDelete(id)} title="Delete Task">
+          <button 
+            className="card-delete-icon-btn" 
+            onClick={handleDeleteClick} 
+            title="Delete Task"
+            disabled={isUpdating}
+            style={{ cursor: isUpdating ? 'not-allowed' : 'pointer' }}
+          >
             🗑️
           </button>
         )}
@@ -46,7 +76,7 @@ function TaskCard({ task, userRole, onStatusChange, onDelete }) {
 
       {/* Card Body */}
       <div className="card-body-content">
-        <h4>{title}</h4>
+        <h4 style={{ textDecoration: displayStatus === 'Completed' ? 'line-through' : 'none' }}>{title}</h4>
         <div className="card-meta-assignment-details">
           {userRole === 'boss' ? (
             <p>Assigned to: <strong>{assignedTo}</strong></p>
@@ -68,7 +98,9 @@ function TaskCard({ task, userRole, onStatusChange, onDelete }) {
             <select 
               className={`status-inline-selector ${statusClass}`}
               value={displayStatus}
-              onChange={(e) => onStatusChange(id, e.target.value)}
+              onChange={handleStatusUpdate}
+              disabled={isUpdating}
+              style={{ cursor: isUpdating ? 'not-allowed' : 'pointer' }}
             >
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>

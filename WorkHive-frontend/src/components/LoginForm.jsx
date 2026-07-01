@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
 function LoginForm({ onNavigate }) {
   const [credentials, setCredentials] = useState({
-    username: '', // Aligned with Spring Boot backend entity key
+    username: '', 
     password: '',
     rememberMe: false
   });
@@ -27,6 +29,8 @@ function LoginForm({ onNavigate }) {
     setLoading(true);
 
     try {
+      console.log("Attempting login request to:", `${API_BASE}/api/users/login`);
+
       const response = await fetch(`${API_BASE}/api/users/login`, {
         method: "POST",
         headers: {
@@ -38,13 +42,25 @@ function LoginForm({ onNavigate }) {
         })
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Invalid username or password.");
+      // 1. Read response as text first to handle both string and JSON data safely
+      const responseText = await response.text();
+      
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        data = null; // Response is a plain string message, not a JSON object
       }
 
-      // Read matching profile data directly from MySQL
-      const userProfile = await response.json();
+      if (!response.ok) {
+        throw new Error(responseText || "Invalid username or password.");
+      }
+
+      // 2. Fallback to parsed JSON object or use data directly
+      const userProfile = data;
+      if (!userProfile || !userProfile.role) {
+        throw new Error("System Error: Invalid user profile payload received from server.");
+      }
 
       // Save user session details in browser storage
       localStorage.setItem("workhive_user", JSON.stringify(userProfile));
@@ -61,7 +77,8 @@ function LoginForm({ onNavigate }) {
       }
 
     } catch (err) {
-      setErrorMessage(err.message);
+      console.error("Login error encountered:", err);
+      setErrorMessage(err.message || "A network connection error occurred.");
     } finally {
       setLoading(false);
     }

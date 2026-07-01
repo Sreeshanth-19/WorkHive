@@ -7,15 +7,24 @@ import BossDashboard from './components/BossDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
 
 function App() {
-  // Stateful Navigation Engine with Automated Session Detection
+  // Stateful Navigation Engine with Bulletproof Session Routing
   const [screen, setScreen] = useState(() => {
     const activeSession = localStorage.getItem("workhive_user");
     
     if (activeSession) {
       try {
         const user = JSON.parse(activeSession);
-        if (user.role === 'BOSS') return 'boss';
-        if (user.role === 'EMPLOYEE') return 'employee';
+        
+        // Normalize role check to protect against unexpected casing adjustments
+        const normalizedRole = String(user?.role || '').toUpperCase().trim();
+        
+        if (normalizedRole === 'BOSS') return 'boss';
+        if (normalizedRole === 'EMPLOYEE') return 'employee';
+        
+        // 🚀 FIX: Valid JSON but missing/unrecognized role field - clear it to break loop traps
+        console.warn("Unrecognized profile role type detected. Purging invalid token payload.");
+        localStorage.removeItem("workhive_user");
+        
       } catch (e) {
         console.error("Corrupted session signature cleared:", e);
         localStorage.removeItem("workhive_user");

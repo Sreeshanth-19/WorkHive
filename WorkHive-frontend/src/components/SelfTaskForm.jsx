@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import './SelfTaskForm.css';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 function SelfTaskForm({ onAddGoal, onClose }) {
-  const currentSessionUser = JSON.parse(localStorage.getItem("workhive_user")) || { id: null };
+  // 🚀 FIX: Wrapped in defensive block to safely catch broken session variables
+  const currentSessionUser = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("workhive_user")) || { id: null };
+    } catch (e) {
+      return { id: null };
+    }
+  })();
 
   const [goalData, setGoalData] = useState({
     title: '',
@@ -37,6 +45,8 @@ function SelfTaskForm({ onAddGoal, onClose }) {
     setErrorMessage('');
     
     try {
+      console.log("Submitting self-directed milestone to resource stack:", `${API_BASE}/api/tasks/user/${currentSessionUser.id}`);
+
       const response = await fetch(`${API_BASE}/api/tasks/user/${currentSessionUser.id}`, {
         method: "POST",
         headers: {
@@ -48,19 +58,35 @@ function SelfTaskForm({ onAddGoal, onClose }) {
           status: 'TODO', 
           dueDate: goalData.deadline, 
           assignedBy: 'Self (Goal)',
-          priority: goalData.priority
+          priority: goalData.priority.toUpperCase() // 🚀 FIX: Forces uppercase enum alignment (HIGH, MEDIUM, LOW)
         })
       });
 
+      // 1. Capture response text cleanly to insulate against runtime deserialization breaks
+      const responseText = await response.text();
+
+      // 2. Safely translate string data into actionable data structures
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        data = null;
+      }
+
       if (!response.ok) {
-        throw new Error("The relational database engine rejected self-goal creation mapping.");
+        if (data && typeof data === 'object') {
+          const combinedErrors = Object.values(data).join(" | ");
+          throw new Error(combinedErrors);
+        }
+        throw new Error(responseText || "The relational database engine rejected self-goal creation mapping.");
       }
 
       onAddGoal();
       if (onClose) onClose();
 
     } catch (err) {
-      setErrorMessage(err.message);
+      console.error("Self-goal compilation exception caught:", err);
+      setErrorMessage(err.message || "A network transaction fault occurred.");
     } finally {
       setLoading(false);
     }
@@ -88,6 +114,7 @@ function SelfTaskForm({ onAddGoal, onClose }) {
 
         <form onSubmit={handleSubmit}>
           
+          {/* Goal Description */}
           <div className="goal-form-field">
             <label htmlFor="title">Goal Description</label>
             <div className="goal-input-wrapper">
@@ -104,6 +131,7 @@ function SelfTaskForm({ onAddGoal, onClose }) {
             </div>
           </div>
 
+          {/* Target Priority */}
           <div className="goal-form-field">
             <label htmlFor="priority">Target Priority</label>
             <div className="goal-input-wrapper">
@@ -122,6 +150,7 @@ function SelfTaskForm({ onAddGoal, onClose }) {
             </div>
           </div>
 
+          {/* Target Deadline */}
           <div className="goal-form-field">
             <label htmlFor="deadline">Target Deadline</label>
             <div className="goal-input-wrapper">
@@ -133,7 +162,7 @@ function SelfTaskForm({ onAddGoal, onClose }) {
                 onChange={handleChange} 
                 required 
                 disabled={loading}
-                min={todayDateString} /* BLOCKS PAST DATES visually and systematically */
+                min={todayDateString}
               />
             </div>
           </div>

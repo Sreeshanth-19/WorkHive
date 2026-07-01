@@ -15,6 +15,7 @@ function RegistrationForm({ onNavigate }) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // 🌟 Added loading state protection
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,9 +29,11 @@ function RegistrationForm({ onNavigate }) {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setLoading(true); // 🌟 Block form mashing immediately
 
     if (!formData.role) {
       setError("Please select a valid role before proceeding.");
+      setLoading(false);
       return;
     }
 
@@ -78,6 +81,8 @@ function RegistrationForm({ onNavigate }) {
     } catch (err) {
       console.error("Registration error encountered:", err);
       setError(err.message || "A network error occurred. Please try again.");
+    } finally {
+      setLoading(false); // 🌟 Release form controls when finished
     }
   };
 
@@ -102,7 +107,7 @@ function RegistrationForm({ onNavigate }) {
 
           <h2>Create your account</h2>
           <p className="login-redirect">
-            Already have an account? <a href="#login" onClick={(e) => { e.preventDefault(); onNavigate('login'); }}>Log in</a>
+            Already have an account? <a href="#login" onClick={(e) => { e.preventDefault(); if(!loading) onNavigate('login'); }}>Log in</a>
           </p>
 
           {/* Dynamic Notifications */}
@@ -123,6 +128,7 @@ function RegistrationForm({ onNavigate }) {
                   onChange={handleChange} 
                   required 
                   placeholder="janedoe"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -139,6 +145,7 @@ function RegistrationForm({ onNavigate }) {
                   onChange={handleChange} 
                   required 
                   placeholder="name@company.com"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -153,6 +160,7 @@ function RegistrationForm({ onNavigate }) {
                   value={formData.role} 
                   onChange={handleChange}
                   required
+                  disabled={loading}
                 >
                   <option value="" disabled hidden>Select Role</option>
                   <option value="EMPLOYEE">Employee (Track & Create Goals)</option>
@@ -173,11 +181,13 @@ function RegistrationForm({ onNavigate }) {
                   onChange={handleChange} 
                   required 
                   placeholder="••••••••"
+                  disabled={loading}
                 />
                 <button 
                   type="button" 
                   className="toggle-password-btn" 
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={loading}
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
@@ -197,8 +207,8 @@ function RegistrationForm({ onNavigate }) {
               By registering, you agree to our <a href="#terms">Terms</a> & <a href="#privacy">Privacy Policy</a>.
             </p>
 
-            <button type="submit" className="pill-submit-btn">
-              Create an account
+            <button type="submit" className="pill-submit-btn" disabled={loading}>
+              {loading ? "Creating Account (Waking Up Server)..." : "Create an account"}
             </button>
           </form>
         </div>

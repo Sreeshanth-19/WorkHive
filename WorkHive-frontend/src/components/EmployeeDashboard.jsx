@@ -2,10 +2,18 @@ import React, { useState, useEffect } from 'react';
 import TaskCard from './TaskCard';
 import SelfTaskForm from './SelfTaskForm';
 import './EmployeeDashboard.css';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
 function EmployeeDashboard({ onNavigate }) {
-  // Extract live session profile information safely
-  const currentSessionUser = JSON.parse(localStorage.getItem("workhive_user")) || { id: null, username: "Employee" };
+  // 🚀 FIX: Extract live session profile information safely with try/catch block
+  const currentSessionUser = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("workhive_user")) || { id: null, username: "Employee" };
+    } catch (e) {
+      return { id: null, username: "Employee" };
+    }
+  })();
 
   // Stateful core engines linked to the database
   const [myTasks, setMyTasks] = useState([]);
@@ -14,9 +22,14 @@ function EmployeeDashboard({ onNavigate }) {
 
   // Centralized data synchronizer function for this specific employee
   const fetchEmployeeTasks = async () => {
-    if (!currentSessionUser.id) return;
+    if (!currentSessionUser.id) {
+      setLoading(false);
+      return;
+    }
     try {
       setLoading(true);
+      console.log(`Synchronizing personal tasks from API engine for User ID: ${currentSessionUser.id}`);
+      
       const response = await fetch(`${API_BASE}/api/tasks/user/${currentSessionUser.id}`);
       if (!response.ok) throw new Error("Failed to pull personal action items queue.");
       
@@ -24,10 +37,11 @@ function EmployeeDashboard({ onNavigate }) {
       
       // Standardize backend attributes into values expected by your frontend components
       const formattedTasks = databaseTasks.map(task => {
-        // Normalize status strings for CSS class checks (e.g. "IN_PROGRESS" -> "In Progress")
+        // Normalize status strings for CSS class checks
         let formattedStatus = "Pending";
-        if (task.status === "IN_PROGRESS" || task.status === "In Progress") formattedStatus = "In Progress";
-        if (task.status === "COMPLETED" || task.status === "Completed") formattedStatus = "Completed";
+        const rawStatus = String(task.status || '').toUpperCase().trim();
+        if (rawStatus === "IN_PROGRESS" || rawStatus === "IN PROGRESS") formattedStatus = "In Progress";
+        if (rawStatus === "COMPLETED") formattedStatus = "Completed";
 
         return {
           id: task.id,
@@ -65,6 +79,11 @@ function EmployeeDashboard({ onNavigate }) {
       if (newStatus === "In Progress") backendStatus = "IN_PROGRESS";
       if (newStatus === "Completed") backendStatus = "COMPLETED";
 
+      // 🚀 FIX: Prevent sending literal string "N/A" to backend LocalDate objects
+      const cleanDueDate = (targetTask.deadline === "N/A" || targetTask.deadline === "No Deadline") 
+        ? null 
+        : targetTask.deadline;
+
       const response = await fetch(`${API_BASE}/api/tasks/${id}`, {
         method: "PUT",
         headers: {
@@ -74,11 +93,14 @@ function EmployeeDashboard({ onNavigate }) {
           title: targetTask.title,
           description: targetTask.description,
           status: backendStatus,
-          dueDate: targetTask.deadline
+          dueDate: cleanDueDate
         })
       });
 
-      if (!response.ok) throw new Error("Could not save update on the database.");
+      if (!response.ok) {
+        const errorMsg = await response.text();
+        throw new Error(errorMsg || "Could not save update on the database.");
+      }
 
       // If network confirms, change state locally so UI shifts immediately
       setMyTasks((prev) => prev.map(task => 

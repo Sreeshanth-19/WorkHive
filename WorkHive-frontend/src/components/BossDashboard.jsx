@@ -2,10 +2,18 @@ import React, { useState, useEffect } from 'react';
 import TaskCard from './TaskCard';
 import AssignTaskForm from './AssignTaskForm';
 import './BossDashboard.css';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 function BossDashboard({ onNavigate }) {
-  const currentSessionUser = JSON.parse(localStorage.getItem("workhive_user")) || { username: "Manager" };
+  // Defensive localStorage parsing to avoid crashes if empty
+  const currentSessionUser = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("workhive_user")) || { username: "Manager" };
+    } catch (e) {
+      return { username: "Manager" };
+    }
+  })();
 
   const [tasks, setTasks] = useState([]);
   const [team, setTeam] = useState([]);
@@ -15,6 +23,7 @@ function BossDashboard({ onNavigate }) {
   const fetchWorkspaceData = async () => {
     try {
       setLoading(true);
+      console.log("Synchronizing workspace data from API engine:", API_BASE);
       
       const userResponse = await fetch(`${API_BASE}/api/users`);
       if (!userResponse.ok) throw new Error("Failed to pull system users.");
@@ -24,25 +33,23 @@ function BossDashboard({ onNavigate }) {
         .filter(user => String(user.role || '').toUpperCase().trim() === "EMPLOYEE")
         .map(user => ({
           id: user.id,
-          name: user.username,
+          name: user.username || "Unknown Employee",
           role: "Team Contributor",
           status: "Online"
         }));
       
       setTeam(employeesOnly);
 
-      let aggregatedTasks = [];
-      for (const employee of employeesOnly) {
-        const taskResponse = await fetch(`${API_BASE}/api/tasks/user/${employee.id}`);
-        if (taskResponse.ok) {
-          const userTasks = await taskResponse.json();
+      // 🚀 OPTIMIZATION: Fetch all employee tasks in parallel instead of sequentially
+      const taskPromises = employeesOnly.map(async (employee) => {
+        try {
+          const taskResponse = await fetch(`${API_BASE}/api/tasks/user/${employee.id}`);
+          if (!taskResponse.ok) return [];
           
-          // ─── DIAGNOSTIC LOG CHECKPOINT ─────────────────────────────────────
-          // This prints the exact structure of your database rows into F12 Console
+          const userTasks = await taskResponse.json();
           console.log(`📦 Raw Database Tasks for ${employee.name}:`, userTasks);
 
-          const formattedTasks = userTasks.map(task => {
-            
+          return userTasks.map(task => {
             // 1. Case-Insensitive Status Normalizer
             const rawStatus = String(task.status || '').toUpperCase().trim();
             let formattedStatus = "Pending";
@@ -50,8 +57,7 @@ function BossDashboard({ onNavigate }) {
             if (rawStatus === "IN_PROGRESS" || rawStatus === "IN PROGRESS") formattedStatus = "In Progress";
             if (rawStatus === "COMPLETED") formattedStatus = "Completed";
 
-            // 2. DEFENSIVE MULTI-KEY PRIORITY LOOKUP (Fixes the Medium Priority Label)
-            // Checks priority, priorityLevel, taskPriority, severity, and urgency automatically
+            // 2. Multi-Key Priority Lookup
             const backendPriorityValue = task.priority || task.priorityLevel || task.taskPriority || task.severity || task.urgency || '';
             const rawPriority = String(backendPriorityValue).toUpperCase().trim();
             
@@ -71,12 +77,16 @@ function BossDashboard({ onNavigate }) {
               deadline: task.dueDate || "No Deadline"
             };
           });
-          
-          aggregatedTasks = [...aggregatedTasks, ...formattedTasks];
+        } catch (taskErr) {
+          console.error(`Failed loading tasks for employee ${employee.id}:`, taskErr);
+          return []; // Gracefully return empty array for this user so dashboard doesn't break completely
         }
-      }
-      
-      setTasks(aggregatedTasks);
+      });
+
+      // Wait for all simultaneous network requests to finish resolving
+      const resolvedTaskArrays = await Promise.all(taskPromises);
+      setTasks(resolvedTaskArrays.flat());
+
     } catch (err) {
       console.error("Full-stack data synchronization sync error:", err);
     } finally {
@@ -97,14 +107,19 @@ function BossDashboard({ onNavigate }) {
       const response = await fetch(`${API_BASE}/api/tasks/${id}`, {
         method: "DELETE"
       });
-      if (!response.ok) throw new Error("Could not drop task from backend.");
+      
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || "Could not drop task from backend.");
+      }
+      
       setTasks((prev) => prev.filter(task => task.id !== id));
     } catch (err) {
       alert(`Error dropping operational instance: ${err.message}`);
     }
   };
 
-  // Case-Insensitive Metrics Calculators (Fixes Closed Ops Counter)
+  // Case-Insensitive Metrics Calculators
   const totalTasks = tasks.length;
   const pendingTasks = tasks.filter(t => String(t.status).toUpperCase().trim() !== 'COMPLETED').length;
   const completedTasks = tasks.filter(t => String(t.status).toUpperCase().trim() === 'COMPLETED').length;
@@ -191,7 +206,9 @@ function BossDashboard({ onNavigate }) {
                   team.map((member) => (
                     <div className="team-member-card" key={member.id}>
                       <div className="member-identity">
-                        <div className="avatar-placeholder">{member.name.split(' ').map(n => n[0]).join('')}</div>
+                        <div className="avatar-placeholder">
+                          {(member.name || 'E').split(' ').map(n => n[0]).join('')}
+                        </div>
                         <div className="member-details"><h4>{member.name}</h4><p>{member.role}</p></div>
                       </div>
                       <div className="member-meta-stats">
