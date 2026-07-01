@@ -1,0 +1,367 @@
+/* BossDashboard.css */
+
+/* ─── WORKSPACE SHELL APPARATUS ─────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box !important;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-app-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background-color: #f0f9ff; /* Soft sky blue underlying core theme base */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden; /* Prevents raw viewport breaks */
+}
+
+/* ─── 1. FIXED LEFT SIDEBAR PANELS ──────────────────────────────────── */
+.dashboard-sidebar {
+  width: 260px;
+  height: 100%;
+  background-color: #ffffff;
+  border-right: 1px solid rgba(2, 132, 199, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem 1.25rem;
+  flex-shrink: 0;
+}
+
+.sidebar-brand h2 {
+  color: #0369a1;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.role-tag {
+  display: inline-block;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2.5rem;
+  flex-grow: 1;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #4b5563;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+  background-color: #f0f9ff;
+  color: #0284c7;
+}
+
+.menu-item.active {
+  background-color: #0ea5e9;
+  color: #ffffff;
+}
+
+.logout-btn {
+  width: 100%;
+  background: none;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #fef2f2;
+}
+
+/* ─── 2. INDEPENDENT MAIN WORKSPACE ENVIRONMENT ────────────────────── */
+.dashboard-main-content {
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2.5rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  overflow-y: auto; /* Scroll boundaries self-contained inside execution layout block */
+}
+
+.main-workspace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header-welcome h1 {
+  color: #111827;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.header-welcome p {
+  color: #4b5563;
+  font-size: 0.92rem;
+  margin-top: 2px;
+}
+
+.accent-action-btn {
+  background-color: #0ea5e9;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+  transition: all 0.2s ease;
+}
+
+.accent-action-btn:hover {
+  background-color: #0284c7;
+  transform: translateY(-1px);
+}
+
+/* ─── 3. METRIC DASHBOARD OVERVIEW SUMMARY GRID CARDS ───────────────── */
+.metrics-grid-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(3, 105, 161, 0.04);
+}
+
+.metric-info h3 {
+  font-size: 0.85rem;
+  color: #4b5563;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.metric-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #111827;
+  margin-top: 4px;
+}
+
+.metric-badge-icon {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+/* ─── 4. DATA MATRIX LAYOUT BLOCKS ──────────────────────────────────── */
+.workspace-data-split-view {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  align-items: start;
+  flex-grow: 1;
+}
+
+.data-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 25px rgba(3, 105, 161, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  margin-bottom: 1.25rem;
+}
+
+.panel-header h2 {
+  font-size: 1.2rem;
+  color: #111827;
+  font-weight: 700;
+}
+
+.panel-subtitle {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* ─── ACTIVE LEDGER DATA TABLE SCHEMA ───────────────────────────────── */
+.scrollable-table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.ledger-table th {
+  padding: 12px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #4b5563;
+  border-bottom: 2px solid rgba(2, 132, 199, 0.1);
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.ledger-table td {
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  color: #1f2937;
+  border-bottom: 1px solid rgba(2, 132, 199, 0.05);
+}
+
+.task-title-cell {
+  font-weight: 600;
+  color: #0369a1 !important;
+}
+
+.date-cell {
+  font-family: monospace;
+  color: #4b5563;
+}
+
+/* PRIORITY PILLS CONTOURS */
+.priority-pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.priority-pill.high { background-color: #fee2e2; color: #ef4444; }
+.priority-pill.medium { background-color: #fef3c7; color: #d97706; }
+.priority-pill.low { background-color: #e0e7ff; color: #4f46e5; }
+
+/* REUSABLE OPERATION STATUS BADGES */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.status-badge.pending { background-color: #f3f4f6; color: #4b5563; border: 1px solid #d1d5db; }
+.status-badge.in-progress { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+.status-badge.completed { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+
+/* ─── STAFF STAND-UP RESOURCE MATRIX COMPONENT ──────────────────────── */
+.team-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.team-member-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.member-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-placeholder {
+  width: 36px;
+  height: 36px;
+  background-color: #bae6fd;
+  color: #0369a1;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.member-details h4 {
+  font-size: 0.9rem;
+  color: #111827;
+  font-weight: 600;
+}
+
+.member-details p {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.member-meta-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.presence-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50px;
+}
+.presence-dot.online { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
+.presence-dot.offline { background-color: #9ca3af; }
+
+.active-count {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+/* ─── VIEWPORT SCALE RESPONSIVE SYSTEM ────────────────────────────────── */
+@media (max-width: 1024px) {
+  .workspace-data-split-view { grid-template-columns: 1fr; gap: 20px; }
+}
+
+@media (max-width: 768px) {
+  .dashboard-app-container { flex-direction: column; }
+  .dashboard-sidebar { width: 100%; height: auto; padding: 1rem; border-right: none; border-bottom: 1px solid rgba(2, 132, 199, 0.15); }
+  .sidebar-menu { display: none; } /* On simple handhelds, swap for hamburger controls or rely on headers */
+  .metrics-grid-row { grid-template-columns: 1fr; gap: 12px; }
+  .dashboard-main-content { padding: 1.5rem 1rem; }
+}

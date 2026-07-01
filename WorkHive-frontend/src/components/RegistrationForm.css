@@ -1,0 +1,310 @@
+/* RegistrationForm.css */
+
+/* ─── RESET & VIEWPORT LOCK ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box !important;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden !important; /* Strictly blocks all background scrolling */
+  background-color: #e0f2fe;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ─── BASE LAYER: Fixed Full-Viewport Sky Blue Gradient ─────────────── */
+.fullscreen-auth-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+  padding: 16px;
+}
+
+/* ─── CENTER STACK ───────────────────────────────────────────────────── */
+.auth-center-stack {
+  width: 100%;
+  max-width: 680px; /* Maintained the wider container layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px; /* Completely removed outer stack gaps to control spacing manually */
+}
+
+/* ─── BRAND (Inside Card Integration) ────────────────────────────────── */
+/* ─── BRAND (BALANCED SPACING) ───────────────────────────── */
+
+.brand-container {
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.company-brand-name {
+  color: #0369a1;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.company-tagline {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #075985;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+
+  margin-top: 4px; /* Nice professional gap */
+  line-height: 1.2;
+}
+/* ─── WIDER FROSTED GLASS CARD ───────────────────────────────────────── */
+.glass-registration-card {
+  width: 100%;
+
+  background: rgba(255,255,255,0.88);
+
+  border-radius: 22px;
+
+  padding: 1rem 2rem;
+
+  box-shadow:
+    0 25px 50px rgba(15, 23, 42, 0.15);
+
+  border: 1px solid rgba(255,255,255,0.9);
+}
+
+.glass-registration-card h2 {
+  color: #111827;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: -0.5px;
+  margin-top: 0.25rem; /* Micro-gap below the tagline container */
+  margin-bottom: 2px;
+}
+
+.login-redirect {
+  font-size: 0.88rem;
+  color: #4b5563;
+  text-align: center;
+  margin-bottom: 1.5rem; /* Reduced from 2rem to pull the form up cleanly */
+}
+
+.login-redirect a {
+  color: #0284c7;
+  font-weight: 600;
+  text-decoration: none;
+}
+.login-redirect a:hover { text-decoration: underline; }
+
+/* ─── HORIZONTAL FORM FIELDS ─────────────────────────────────────────── */
+.form-field {
+  display: flex;
+  flex-direction: row;       /* Keeps label and inputs side-by-side */
+  align-items: center;       
+  justify-content: space-between;
+  margin-bottom: 1.1rem;     /* Slightly optimized row gap */
+  gap: 16px;
+}
+
+.form-field label {
+  font-size: 0.88rem;
+  color: #1f2937;
+  font-weight: 600;
+  flex: 0 0 150px;           /* Uniform structural alignment for labels */
+  text-align: left;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;                   
+  width: 100%;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  padding: 9px 14px;
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: #111827;
+  background-color: rgba(255, 255, 255, 0.9);
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.form-field select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 0.9em;
+  padding-right: 2.5rem;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+.form-field input::placeholder { color: #9ca3af; }
+
+/* ─── SHOW/HIDE PASSWORD BUTTON ──────────────────────────────────────── */
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #4b5563;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+.toggle-password-btn:hover { color: #0284c7; }
+
+/* ─── PASSWORD REQUIREMENTS CHECKLIST ───────────────────────────────── */
+.password-requirements {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+  margin-top: -0.5rem;
+  margin-bottom: 1.25rem;
+  margin-left: 166px; /* Aligns requirements box cleanly beneath the input wrapper */
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.74rem;
+  color: #6b7280;
+}
+
+.requirement-item::before {
+  content: "•";
+  margin-right: 6px;
+  font-size: 0.85rem;
+}
+
+.requirement-item.valid        { color: #10b981; }
+.requirement-item.valid::before { color: #10b981; }
+
+/* ─── LEGAL NOTICE & ACTIONS ─────────────────────────────────────────── */
+.legal-notice {
+  font-size: 0.8rem;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 1.2rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+}
+.legal-notice a { color: #0284c7; text-decoration: none; }
+.legal-notice a:hover { text-decoration: underline; }
+
+.pill-submit-btn {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  margin: 0 auto;
+  background-color: #0ea5e9;
+  color: #ffffff;
+  border: none;
+  padding: 11px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+}
+
+.pill-submit-btn:hover {
+  background-color: #0284c7;
+  transform: translateY(-1px);
+}
+
+/* ─── RESPONSIVE: SMALL SCREENS ──────────────────────────────────────── */
+/* ─── RESPONSIVE: TABLETS ───────────────────────────────── */
+
+@media (max-width: 768px) {
+
+  html,
+  body,
+  #root {
+    overflow-y: auto !important;
+  }
+
+  .glass-registration-card {
+    padding: 1.75rem;
+  }
+
+  .form-field {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .form-field label {
+    flex: none;
+    width: 100%;
+  }
+
+  .password-requirements {
+    margin-left: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .company-brand-name {
+    font-size: 2rem;
+  }
+}
+
+/* ─── RESPONSIVE: MOBILE ────────────────────────────────── */
+
+@media (max-width: 480px) {
+
+  .fullscreen-auth-wrapper {
+    padding: 12px;
+  }
+
+  .glass-registration-card {
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .company-brand-name {
+    font-size: 1.8rem;
+  }
+
+  .company-tagline {
+    font-size: 0.65rem;
+  }
+
+  .glass-registration-card h2 {
+    font-size: 1.1rem;
+  }
+
+  .login-redirect {
+    font-size: 0.8rem;
+  }
+
+  .pill-submit-btn {
+    width: 100%;
+    max-width: 100%;
+  }
+}

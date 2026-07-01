@@ -1,0 +1,211 @@
+.workhive-task-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(3, 105, 161, 0.03);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle left indicator border rings to establish context state instantly */
+.workhive-task-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background-color: #d1d5db;
+}
+
+.workhive-task-card:hover {
+  transform: translateY(-2px);
+  background-color: #ffffff;
+  box-shadow: 0 8px 20px rgba(3, 105, 161, 0.06);
+}
+
+/* ─── 1. CARD TOP CONFIGURATIONS ────────────────────────────────────── */
+.card-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.priority-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.priority-tag.high { background-color: #fee2e2; color: #ef4444; }
+.priority-tag.medium { background-color: #fef3c7; color: #d97706; }
+.priority-tag.low { background-color: #e0e7ff; color: #4f46e5; }
+
+.card-delete-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 2px;
+  opacity: 0.4;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.card-delete-icon-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* ─── 2. CARD BODY CONTENT ─────────────────────────────────────────── */
+.card-body-content h4 {
+  font-size: 0.98rem;
+  color: #111827;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.card-meta-assignment-details p {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+.card-meta-assignment-details strong {
+  color: #374151;
+}
+
+/* ─── 3. CARD FOOTER CONTROLS ──────────────────────────────────────── */
+.card-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(2, 132, 199, 0.05);
+}
+
+.deadline-tracker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4b5563;
+}
+
+.clock-emoji {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.deadline-date {
+  font-size: 0.78rem;
+  font-family: monospace;
+  font-weight: 600;
+}
+
+/* ─── 4. DYNAMIC STATUS PILLS & DROPDOWNS SYSTEM ────────────────────── */
+.status-display-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 50px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-inline-selector {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 24px 4px 10px;
+  border-radius: 50px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 0.8em;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* ─── MAPPED STATE PALETTES (SPLIT & CLEANED) ─── */
+
+/* PENDING STATE */
+.workhive-task-card.pending::before { background-color: #9ca3af; }
+.status-display-badge.pending,
+.status-inline-selector.pending {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border-color: #d1d5db;
+}
+.status-inline-selector.pending {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2.5'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+/* IN PROGRESS STATE */
+.workhive-task-card.in-progress::before { background-color: #0ea5e9; }
+.status-display-badge.in-progress,
+.status-inline-selector.in-progress {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+.status-inline-selector.in-progress {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230369a1' stroke-width='2.5'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+/* Polish the native calendar selector input wrapper */
+input[type="date"] {
+  cursor: pointer;
+  position: relative;
+  font-family: inherit;
+  color: #374151;
+  font-weight: 500;
+}
+
+/* UI Trick: Expand the calendar click region to cover the entire input box */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Keep a clean visual calendar marker icon anchored gracefully on the far right */
+input[type="date"]::after {
+  content: "📅";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+
+/* COMPLETED STATE */
+.workhive-task-card.completed::before { background-color: #10b981; }
+.status-display-badge.completed,
+.status-inline-selector.completed {
+  background-color: #d1fae5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+.status-inline-selector.completed {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23065f46' stroke-width='2.5'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}

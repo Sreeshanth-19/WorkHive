@@ -1,0 +1,175 @@
+/* AssignTaskForm.css */
+
+/* ─── MODAL DIALOG OVERLAY SHADOW BOXES ─────────────────────────────── */
+.form-overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(3, 105, 161, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* Guarantees the overlay rides clear over data grids */
+  padding: 16px;
+}
+
+.assigning-matrix-card {
+  width: 100%;
+  max-width: 580px; /* Highly optimized structural width profile */
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 50px rgba(3, 105, 161, 0.15);
+  animation: formPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes formPopIn {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.form-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid rgba(2, 132, 199, 0.1);
+  padding-bottom: 12px;
+}
+
+.form-card-header h3 {
+  font-size: 1.3rem;
+  color: #111827;
+  font-weight: 700;
+}
+
+.form-card-header p {
+  font-size: 0.82rem;
+  color: #4b5563;
+  margin-top: 2px;
+}
+
+.close-form-modal-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 4px;
+}
+.close-form-modal-btn:hover { color: #ef4444; }
+
+/* ─── COHESIVE HORIZONTAL ALIGNMENT FORM SCHEMA ─────────────────────── */
+.dashboard-form-field {
+  display: flex;
+  flex-direction: row;       /* Standardized side-by-side matching workflow layout */
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 16px;
+}
+
+.dashboard-form-field label {
+  font-size: 0.88rem;
+  color: #1f2937;
+  font-weight: 600;
+  flex: 0 0 160px;           /* Replicates structural 160px alignment column grid marker */
+  text-align: left;
+}
+
+.dashboard-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+}
+
+.dashboard-form-field input,
+.dashboard-form-field select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: #111827;
+  background-color: rgba(255, 255, 255, 0.95);
+  font-family: inherit;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.dashboard-form-field select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 0.9em;
+  padding-right: 2.5rem;
+}
+
+.dashboard-form-field input:focus,
+.dashboard-form-field select:focus {
+  border-color: #0ea5e9;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+/* ─── ACTION CONTROL BUTTON SLABS ───────────────────────────────────── */
+.form-action-button-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(2, 132, 199, 0.08);
+}
+
+.form-cancel-btn {
+  background: none;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.form-cancel-btn:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.form-submit-pill-btn {
+  background-color: #0ea5e9;
+  color: #ffffff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+  transition: all 0.2s ease;
+}
+.form-submit-pill-btn:hover {
+  background-color: #0284c7;
+  transform: translateY(-1px);
+}
+
+/* ─── MOBILE MEDIA QUERIES RESPONSIVENESS AUTOMATION ────────────────── */
+@media (max-width: 580px) {
+  .assigning-matrix-card { padding: 1.25rem; }
+  .dashboard-form-field { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .dashboard-form-field label { flex: none; width: auto; }
+  .form-action-button-row { width: 100%; }
+  .form-cancel-btn, .form-submit-pill-btn { flex: 1; text-align: center; }
+}
